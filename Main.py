@@ -94,9 +94,12 @@ class StockCheckerApp(object):
         if is_main_sku:
             variants = json_dict['variants']
             for variant in variants:
+                index = variants.index(variant)
                 self.sku = variant['product_id']
 
-                entry = {self.sku: self.check_stock(region)}
+                entry_name = self.sku+' ({})'.format(variant_attrs[index]['name'])
+
+                entry = {entry_name: self.check_stock(region)}
                 stock.append(entry)
 
             total = 0
