@@ -84,8 +84,7 @@ class StockCheckerApp(object):
 
         if is_main_sku and 'fault' in json_dict:
             err_msg = json_dict['fault']['message']
-            self.display_stock(err_msg)
-            self.update_status('Error')
+            self.update_status(err_msg)
             return
 
         qty = json_dict['inventory']['ats']
@@ -119,36 +118,30 @@ class StockCheckerApp(object):
         for child in self.right_frame.winfo_children():
             child.destroy()
 
-        if isinstance(stock_entries, list):
-            name_label_display = Entry(self.right_frame)
-            name_label_display.insert(0, 'Name')
-            name_label_display.configure(state='readonly')
-            name_label_display.grid(row=0, column=0)
+        name_label_display = Entry(self.right_frame)
+        name_label_display.insert(0, 'Name')
+        name_label_display.configure(state='readonly')
+        name_label_display.grid(row=0, column=0)
 
-            name_display = Entry(self.right_frame)
-            name_display.insert(0, product_name)
-            name_display.configure(state='readonly')
-            name_display.grid(row=0, column=1)
+        name_display = Entry(self.right_frame)
+        name_display.insert(0, product_name)
+        name_display.configure(state='readonly')
+        name_display.grid(row=0, column=1)
 
-            for stock_entry in stock_entries:
-                sku = list(stock_entry)[0]
+        for stock_entry in stock_entries:
+            sku = list(stock_entry)[0]
 
-                i = stock_entries.index(stock_entry)+1
+            i = stock_entries.index(stock_entry)+1
 
-                sku_display = Entry(self.right_frame)
-                sku_display.insert(0, sku)
-                sku_display.configure(state='readonly')
-                sku_display.grid(row=i, column=0)
+            sku_display = Entry(self.right_frame)
+            sku_display.insert(0, sku)
+            sku_display.configure(state='readonly')
+            sku_display.grid(row=i, column=0)
 
-                qty_display = Entry(self.right_frame)
-                qty_display.insert(0, str(stock_entry[sku]))
-                qty_display.configure(state='readonly')
-                qty_display.grid(row=i, column=1)
-        else:  # the stock variable is an error
-            err_display = Entry(self.right_frame)
-            err_display.insert(0, stock_entries)
-            err_display.configure(state='readonly')
-            err_display.grid(row=0, column=0)
+            qty_display = Entry(self.right_frame)
+            qty_display.insert(0, str(stock_entry[sku]))
+            qty_display.configure(state='readonly')
+            qty_display.grid(row=i, column=1)
 
 
 root = Tk()
