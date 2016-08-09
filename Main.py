@@ -128,6 +128,13 @@ class StockCheckerApp(object):
             else:
                 amt = int(self.refresh_amt_input.get())
                 dly = float(self.refresh_dly_input.get())
+                
+                if amt <= 0:
+                    self.update_status('Please enter a non-zero/negative amount.')
+                    return
+                if dly < 0:
+                    self.update_status('Please enter a non-negative delay.')
+                    return
         else:
             amt = 1
             dly = 1
