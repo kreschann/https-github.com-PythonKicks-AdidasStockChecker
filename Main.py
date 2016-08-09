@@ -8,6 +8,7 @@ class StockCheckerApp(object):
     def __init__(self, master, width=1200, height=1200):
         self.sku = ''
         self.client_id = ''
+        self.cycle = 1
 
         # set dimensions
         master.geometry('{}x{}'.format(width, height))
@@ -117,6 +118,7 @@ class StockCheckerApp(object):
     def get_stock(self):
         self.sku = self.sku_input.get().strip()
         self.client_id = self.client_id_input.get().strip()
+        self.cycle = 1
 
         region = self.region_input.get()
 
@@ -128,7 +130,7 @@ class StockCheckerApp(object):
             else:
                 amt = int(self.refresh_amt_input.get())
                 dly = float(self.refresh_dly_input.get())
-                
+
                 if amt <= 0:
                     self.update_status('Please enter a non-zero/negative amount.')
                     return
@@ -143,8 +145,10 @@ class StockCheckerApp(object):
         thread.daemon = True
         thread.start()
 
+        self.disable_submit()
+
     def check_stock(self, region, refresh=1, delay=1):
-        self.update_status('Retrieving {}...'.format(self.sku))
+        self.update_status('Cycle {} retrieving {}...'.format(self.cycle, self.sku))
 
         region = region.upper()
         given_sku = self.sku
@@ -193,14 +197,17 @@ class StockCheckerApp(object):
                 total += entry[sku]
             stock.append({'Total': total})
 
-            self.update_status('Retrieved '+given_sku)
+            self.update_status('Cycle {} retrieved {}'.format(self.cycle, given_sku))
 
             self.display_stock(stock, json_dict['name'])
 
             self.sku = given_sku
             if refresh > 1:
+                self.cycle += 1
                 time.sleep(delay)
                 self.check_stock(region, refresh-1)
+            else:
+                self.enable_submit()
         else:
             return qty
 
@@ -251,6 +258,12 @@ class StockCheckerApp(object):
             valid = False
 
         return valid, err_msg
+
+    def disable_submit(self):
+        self.submit_btn.configure(state='disabled')
+
+    def enable_submit(self):
+        self.submit_btn.configure(state='normal')
 
 
 def add_space(frame):
