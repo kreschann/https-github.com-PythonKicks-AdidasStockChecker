@@ -1,5 +1,5 @@
 import requests
-from Tkinter import *
+from Tkinter import *  # if you are using python 3+, change this line to "from tkinter import *"
 from threading import Thread
 import time
 
