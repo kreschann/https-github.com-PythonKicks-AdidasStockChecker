@@ -126,6 +126,7 @@ class StockCheckerApp(object):
             validity = self.refresh_is_valid()
             if not validity[0]:
                 self.update_status(validity[1])
+                self.enable_submit()
                 return
             else:
                 amt = int(self.refresh_amt_input.get())
